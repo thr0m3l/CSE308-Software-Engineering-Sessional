@@ -1,4 +1,5 @@
 package Account;
+
 import Bank.*;
 
 public abstract class Account {
@@ -77,5 +78,9 @@ public abstract class Account {
 
     public Double getMaxLoan() {
         return maxLoan;
+    }
+
+    public void setInterest(Double newInterest) {
+        depositInterest = newInterest;
     }
 }

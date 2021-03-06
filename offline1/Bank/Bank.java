@@ -32,6 +32,16 @@ public class Bank {
         // Singleton Pattern
         this.internalFund = 1000000.0;
         time = 0;
+
+        employees.put("MD", new ManagingDirector("MD", this));
+        employees.put("O1", new Officer("O1", this));
+        employees.put("O2", new Officer("O2", this));
+        employees.put("C1", new Cashier("C1", this));
+        employees.put("C2", new Cashier("C2", this));
+        employees.put("C3", new Cashier("C3", this));
+        employees.put("C4", new Cashier("C4", this));
+        employees.put("C5", new Cashier("C5", this));
+
     }
 
     public static Bank getBank() {
@@ -72,8 +82,15 @@ public class Bank {
         }
     }
 
-    public void approveLoan(String activeEmployee) {
-        // TODO: Loan Approval Logic
+    public void approveLoan() {
+        for (Loan loan : loanRequests) {
+            try {
+                Account acc = findAccount(loan.name);
+                acc.approveLoan(loan.amount);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void deposit(String name, Double amount) {
@@ -96,13 +113,17 @@ public class Bank {
         }
     }
 
-    public void query(String name) {
+    public Double query(String name) {
+        Account acc = null;
+
         try {
-            Account acc = findAccount(name);
-            System.out.println("Current balance: " + acc.queryDeposit() + "$");
+            acc = findAccount(name);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return acc.queryDeposit();
 
     }
 
@@ -128,6 +149,35 @@ public class Bank {
                 return acc;
 
         }
+    }
+
+    public Employee findEmployee(String name) throws Exception {
+        if (name == null) {
+            throw new Exception("Invalid Employee ID!");
+        } else {
+            Employee emp = null;
+            emp = employees.get(name);
+
+            if (emp == null) {
+                throw new Exception("Unable to find account");
+            } else
+                return emp;
+
+        }
+    }
+
+    public void changeInterest(String name, Double newInterest) {
+        try {
+            Account acc = findAccount(name);
+            acc.setInterest(newInterest);
+        } catch (Exception e) {
+            System.err.println("Unable to find the account");
+            e.printStackTrace();
+        }
+    }
+
+    public Double getInternalFund() {
+        return internalFund;
     }
 
 }

@@ -21,7 +21,7 @@ public class Main {
             } else if (tokens[0].equals("Deposit")) {
                 bank.deposit(activeAccount, Double.parseDouble(tokens[1]));
             } else if (tokens[0].equals("Query")) {
-                bank.query(activeAccount);
+                System.out.println("Current balance: " + bank.query(activeAccount) + "$");
             } else if (tokens[0].equals("Close")) {
                 activeAccount = null;
             } else if (tokens[0].equals("Open")) {
