@@ -33,6 +33,7 @@ public class Bank {
         this.internalFund = 1000000.0;
         time = 0;
 
+        // Initializes all the employees
         employees.put("MD", new ManagingDirector("MD", this));
         employees.put("O1", new Officer("O1", this));
         employees.put("O2", new Officer("O2", this));
@@ -87,10 +88,13 @@ public class Bank {
             try {
                 Account acc = findAccount(loan.name);
                 acc.approveLoan(loan.amount);
+                loanRequests.remove(loan);
+                System.out.println("Loan for " + loan.name + " approved");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     public void deposit(String name, Double amount) {
@@ -158,21 +162,21 @@ public class Bank {
             Employee emp = null;
             emp = employees.get(name);
 
-            if (emp == null) {
-                throw new Exception("Unable to find account");
-            } else
-                return emp;
-
+            if (emp != null) {
+                String msg = loanRequests.isEmpty() == true ? "" : "There are loan requests pending";
+                System.out.println(name + " active. " + msg);
+            }
+            return emp;
         }
     }
 
-    public void changeInterest(String name, Double newInterest) {
-        try {
-            Account acc = findAccount(name);
-            acc.setInterest(newInterest);
-        } catch (Exception e) {
-            System.err.println("Unable to find the account");
-            e.printStackTrace();
+    public void changeInterest(String type, Double newInterest) {
+        Collection<Account> accountList = accounts.values();
+
+        for (Account acc : accountList) {
+            if (acc.getClass().getName().equals("type")) {
+                acc.setInterest(newInterest);
+            }
         }
     }
 

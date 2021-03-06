@@ -8,6 +8,7 @@ public class Cashier extends Employee {
         super(name, bank);
     }
 
+    @Override
     public void approveLoan() {
         System.err.println("You don’t have permission for this operation");
     }

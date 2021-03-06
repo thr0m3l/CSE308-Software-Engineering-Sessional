@@ -40,15 +40,6 @@ public abstract class Account {
 
     public abstract void withdraw(Double amount) throws Exception;
 
-    // public void requestLoan(Double amount) {
-
-    // if (amount > maxLoan)
-    // return;
-    // loanInterest = 10.0;
-    // bank.requestLoan(this, amount);
-
-    // }
-
     public void approveLoan(Double amount) {
         loanBalance += amount;
         balance += amount;

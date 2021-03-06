@@ -11,19 +11,23 @@ public abstract class Employee {
         this.bank = bank;
     }
 
-    public Double lookup(String name) {
-        return bank.query(name);
+    public void lookup(String name) {
+        System.out.println(name + "'s Account Balance: " + bank.query(name) + "$");
     }
 
     public void approveLoan() {
         bank.approveLoan();
     }
 
-    public void changeInterest(String name, Double newInterest) {
+    public void changeInterest(String type, Double newInterest) {
         System.err.println("You don’t have permission for this operation");
     }
 
     public void seeInternalFund() {
         System.err.println("You don’t have permission for this operation");
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -9,8 +9,8 @@ public class ManagingDirector extends Employee {
     }
 
     @Override
-    public void changeInterest(String name, Double newInterest) {
-        bank.changeInterest(name, newInterest);
+    public void changeInterest(String type, Double newInterest) {
+        bank.changeInterest(type, newInterest);
     }
 
 }

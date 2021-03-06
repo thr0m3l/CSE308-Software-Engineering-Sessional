@@ -30,5 +30,6 @@ public class FixedDepositAccount extends Account {
         if (amount > maxWithdraw || amount < minWithdraw) {
             throw new Exception("Invalid Withdraw Amount");
         }
+
     }
 }
