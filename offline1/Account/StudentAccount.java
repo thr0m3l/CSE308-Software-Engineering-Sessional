@@ -14,6 +14,7 @@ public class StudentAccount extends Account {
         super.serviceCharge = 0.0;
         super.name = name;
         super.balance = 0.0;
+        super.loanBalance = 0.0;
 
         if (firstDeposit < super.minFirstDeposit) {
             throw new Exception("First deposit is lower than minimum allowable first deposit");
@@ -26,7 +27,7 @@ public class StudentAccount extends Account {
 
     @Override
     public void withdraw(Double amount) throws Exception {
-        if (amount > maxWithdraw || amount < minWithdraw) {
+        if (amount > maxWithdraw || amount < minWithdraw || amount > balance) {
             throw new Exception("Withdraw failed");
         }
         balance -= amount;

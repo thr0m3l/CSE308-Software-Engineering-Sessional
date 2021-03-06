@@ -28,7 +28,7 @@ public class FixedDepositAccount extends Account {
     @Override
     public void withdraw(Double amount) throws Exception {
         if (amount > maxWithdraw || amount < minWithdraw) {
-            throw new Exception("Invalid Withdraw Amount")
+            throw new Exception("Invalid Withdraw Amount");
         }
     }
 }

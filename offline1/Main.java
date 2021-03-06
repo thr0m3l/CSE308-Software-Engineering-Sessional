@@ -26,6 +26,10 @@ public class Main {
                 activeAccount = null;
             } else if (tokens[0].equals("Open")) {
                 activeAccount = tokens[1];
+            } else if (tokens[0].equals("Withdraw")) {
+                bank.withdraw(activeAccount, Double.parseDouble(tokens[1]));
+            } else if (tokens[0].equals("INC")) {
+                bank.yearEnd();
             }
         }
         sc.close();
