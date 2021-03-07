@@ -3,7 +3,7 @@ package Account;
 import Bank.Bank;
 
 public class StudentAccount extends Account {
-    public StudentAccount(Bank bank, String name, Double firstDeposit) {
+    public StudentAccount(Bank bank, String name, Double firstDeposit) throws Exception {
 
         super(0.0, 0.0, 0.0, 10000.0, 0.0, 1000.0, 5.0, 0.0, bank, name, firstDeposit);
 

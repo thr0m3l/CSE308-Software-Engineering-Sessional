@@ -12,7 +12,8 @@ public abstract class Employee {
     }
 
     public void lookup(String name) {
-        System.out.println(name + "'s Account Balance: " + bank.query(name) + "$");
+        System.out.print(name + "'s ");
+        bank.query(name);
     }
 
     public void approveLoan() {

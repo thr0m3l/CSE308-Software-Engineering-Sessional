@@ -6,14 +6,14 @@ import java.util.HashMap;
 import Account.*;
 import Employee.*;
 
-class Loan {
-    public Double amount;
-    public String name;
+class InvalidUserException extends Exception {
 
-    public Loan(Double amount, String name) {
-        this.amount = amount;
-        this.name = name;
+    private static final long serialVersionUID = 1L;
+
+    public InvalidUserException(String s) {
+        super(s);
     }
+
 }
 
 public class Bank {
@@ -64,36 +64,35 @@ public class Bank {
                 accounts.put(name, new SavingsAccount(this, name, amount));
             }
         } catch (Exception e) {
+            System.err.println("Account creation failed: " + e.getMessage());
             e.printStackTrace();
         }
 
     }
 
-    public void requestLoan(String name, Double amount) throws Exception {
-        if (name == null) {
-            System.err.println("Invalid Account! Please open an valid account first");
-        } else {
-            Account acc = accounts.get(name);
-            if (amount <= acc.getMaxLoan()) {
-                loanRequests.add(new Loan(amount, name));
-                System.out.println("Loan request successful, sent for approval");
-            } else {
-                throw new Exception("Please enter a valid loan amount");
-            }
+    public void requestLoan(String name, Double amount) {
+        try {
+            Account acc = findAccount(name);
+            Loan loan = acc.checkLoanRequest(name, amount);
+            loanRequests.add(loan);
+            System.out.println("Loan request successful. Sent for approval");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void approveLoan() {
+
         for (Loan loan : loanRequests) {
             try {
                 Account acc = findAccount(loan.name);
                 acc.approveLoan(loan.amount);
-                loanRequests.remove(loan);
                 System.out.println("Loan for " + loan.name + " approved");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        loanRequests.clear();
 
     }
 
@@ -103,7 +102,7 @@ public class Bank {
             acc.deposit(amount);
             System.out.println("Deposited: " + amount + "$ ; " + "Current Balance: " + acc.queryDeposit() + "$ ");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -113,42 +112,45 @@ public class Bank {
             acc.withdraw(amount);
             System.out.println("Withdrawn: " + amount + "$ ; " + "Current Balance: " + acc.queryDeposit() + "$ ");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
-    public Double query(String name) {
+    public void query(String name) {
         Account acc = null;
 
         try {
             acc = findAccount(name);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
-        return acc.queryDeposit();
+        System.out
+                .println("Current balance: " + acc.queryDeposit() + "$ ; Loan balance: " + acc.getLoanBalance() + "$");
 
     }
 
     public void yearEnd() {
-        time++;
+        this.time++;
         Collection<Account> accountList = accounts.values();
 
         for (Account acc : accountList) {
             acc.yearEnd();
         }
+
+        System.out.println("1 year passed");
     }
 
     public Account findAccount(String name) throws Exception {
         if (name == null) {
-            throw new Exception("Invalid Account! Please open an valid account first");
+            throw new InvalidUserException("Invalid Account! Please open an valid account first");
         } else {
             Account acc = null;
             acc = accounts.get(name);
 
             if (acc == null) {
-                throw new Exception("Unable to find account");
+                throw new InvalidUserException("Unable to find account");
             } else
                 return acc;
 
@@ -157,7 +159,7 @@ public class Bank {
 
     public Employee findEmployee(String name) throws Exception {
         if (name == null) {
-            throw new Exception("Invalid Employee ID!");
+            throw new InvalidUserException("Invalid Employee ID!");
         } else {
             Employee emp = null;
             emp = employees.get(name);
@@ -174,7 +176,7 @@ public class Bank {
         Collection<Account> accountList = accounts.values();
 
         for (Account acc : accountList) {
-            if (acc.getClass().getName().equals("type")) {
+            if (acc.getClass().getName().equals(type)) {
                 acc.setInterest(newInterest);
             }
         }

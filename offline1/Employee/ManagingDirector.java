@@ -13,4 +13,9 @@ public class ManagingDirector extends Employee {
         bank.changeInterest(type, newInterest);
     }
 
+    @Override
+    public void seeInternalFund() {
+        System.out.println("Internal fund: " + bank.getInternalFund() + "$");
+    }
+
 }

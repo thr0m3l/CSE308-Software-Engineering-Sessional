@@ -1,5 +1,7 @@
 package Account;
 
+import Account.FixedDepositAccount.FixedDepositAccountWithdrawException;
+import Account.SavingsAccount.SavingsAccountWithdrawException;
 import Bank.*;
 
 public abstract class Account {
@@ -23,9 +25,39 @@ public abstract class Account {
     public Bank bank;
     protected String name;
 
+    class InvalidFirstDepositException extends Exception {
+
+        private static final long serialVersionUID = 1L;
+
+        public InvalidFirstDepositException(String s) {
+            super(s);
+        }
+
+    }
+
+    class InvalidAmountException extends Exception {
+
+        private static final long serialVersionUID = 1L;
+
+        public InvalidAmountException(String s) {
+            super(s);
+        }
+
+    }
+
+    class InvalidLoanRequestException extends Exception {
+
+        private static final long serialVersionUID = 1L;
+
+        public InvalidLoanRequestException(String s) {
+            super(s);
+        }
+
+    }
+
     public Account(Double minFirstDeposit, Double minDeposit, Double minWithdraw, Double maxWithdraw,
             Double minWithdrawalPeriod, Double maxLoan, Double depositInterest, Double serviceCharge, Bank bank,
-            String name, Double firstDeposit) {
+            String name, Double firstDeposit) throws InvalidFirstDepositException {
         this.minFirstDeposit = minFirstDeposit;
         this.minDeposit = minDeposit;
         this.minWithdraw = minWithdraw;
@@ -42,11 +74,8 @@ public abstract class Account {
         this.balance = 0.0;
 
         if (firstDeposit < minFirstDeposit) {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                System.err.println("First deposit is lower than minimum allowable first deposit");
-            }
+            throw new InvalidFirstDepositException("First deposit is lower than minimum allowable first deposit");
+
         } else {
             balance += firstDeposit;
         }
@@ -57,25 +86,19 @@ public abstract class Account {
         return this.name;
     }
 
-    public void deposit(Double amount) {
+    public void deposit(Double amount) throws InvalidAmountException {
         if (amount < minDeposit) {
-            try {
-                throw new Exception("Deposit failed");
-            } catch (Exception e) {
-                System.err.println("Deposit amount is less than minimum Deposit amount: " + minDeposit + "$ ;");
-            }
+            throw new InvalidAmountException(
+                    "Deposit amount is less than minimum Deposit amount: " + minDeposit + "$ ;");
         }
 
         balance += amount;
     }
 
-    public void withdraw(Double amount) {
-        if (amount > maxWithdraw || amount < minWithdraw || amount <= balance) {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                System.err.println("Invalid Withdraw amount; Current balance: " + queryDeposit() + "$");
-            }
+    public void withdraw(Double amount)
+            throws InvalidAmountException, SavingsAccountWithdrawException, FixedDepositAccountWithdrawException {
+        if (amount > maxWithdraw || amount < minWithdraw || amount > balance) {
+            throw new InvalidAmountException("Invalid Withdraw amount; Current balance: " + queryDeposit() + "$");
         }
         balance -= amount;
     }
@@ -117,5 +140,14 @@ public abstract class Account {
 
     public Double getLoanBalance() {
         return loanBalance;
+    }
+
+    public Loan checkLoanRequest(String name, Double amount) throws InvalidLoanRequestException {
+        if (amount > maxLoan)
+            throw new InvalidLoanRequestException(
+                    "The amount exceeds maximum value allowable for this type of account. Maximum allowable loan: "
+                            + maxLoan + "$");
+
+        return new Loan(amount, name);
     }
 }
