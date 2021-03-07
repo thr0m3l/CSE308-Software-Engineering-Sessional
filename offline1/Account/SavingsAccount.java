@@ -1,35 +1,26 @@
 package Account;
 
+import Bank.Bank;
+
 public class SavingsAccount extends Account {
 
-    public SavingsAccount(String name, Double firstDeposit) throws Exception {
-        super.minFirstDeposit = 0.0;
-        super.minDeposit = 50000.0;
-        super.minWithdraw = 0.0;
-        super.maxWithdraw = 10000.0;
-        super.minWithdrawalPeriod = 0.0;
-        super.maxLoan = 1000.0;
-        super.loanInterest = 10.0;
-        super.depositInterest = 5.0;
-        super.createdOn = 0.0;
-        super.serviceCharge = 0.0;
-        super.name = name;
-        super.balance = 0.0;
+    public SavingsAccount(Bank bank, String name, Double firstDeposit) {
 
-        if (firstDeposit < super.minFirstDeposit) {
-            throw new Exception("First deposit is lower than minimum allowable first deposit");
-        }
+        super(0.0, 0.0, 0.0, Double.MAX_VALUE, 0.0, 10000.0, 10.0, 500.0, bank, name, firstDeposit);
 
-        super.deposit(firstDeposit);
-
-        System.out.println("Savings account for " + super.name + " created; Initial Balance: " + super.balance + "$");
     }
 
     @Override
-    public void withdraw(Double amount) throws Exception {
-        if (amount > maxWithdraw || amount < minWithdraw) {
-
+    public void withdraw(Double amount) {
+        if (super.balance - amount < 1000) {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                System.err.println(
+                        "A savings account cannot withdraw if the withdrawal results in a deposit of less than 1,000$.");
+            }
         }
+        super.withdraw(amount);
     }
 
 }

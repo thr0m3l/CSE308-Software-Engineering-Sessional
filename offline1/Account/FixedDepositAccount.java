@@ -1,35 +1,24 @@
 package Account;
 
+import Bank.Bank;
+
 public class FixedDepositAccount extends Account {
-    public FixedDepositAccount(String name, Double firstDeposit) throws Exception {
-        super.minFirstDeposit = 100000.0;
-        super.minDeposit = 50000.0;
-        super.minWithdraw = 0.0;
-        super.maxWithdraw = 10000.0;
-        super.minWithdrawalPeriod = 1.0;
-        super.maxLoan = 100000.0;
-        super.loanInterest = 10.0;
-        super.depositInterest = 15.0;
-        super.createdOn = 0.0;
-        super.serviceCharge = 500.0;
-        super.name = name;
-        super.balance = 0.0;
+    public FixedDepositAccount(Bank bank, String name, Double firstDeposit) {
 
-        if (firstDeposit < super.minFirstDeposit) {
-            throw new Exception("First deposit is lower than minimum allowable first deposit");
-        }
+        super(100000.0, 50000.0, 0.0, Double.MAX_VALUE, 1.0, 100000.0, 15.0, 500.0, bank, name, firstDeposit);
 
-        super.deposit(firstDeposit);
-
-        System.out.println(
-                "Fixed Deposit account for " + super.name + " created; Initial Balance: " + super.balance + "$");
     }
 
     @Override
-    public void withdraw(Double amount) throws Exception {
-        if (amount > maxWithdraw || amount < minWithdraw) {
-            throw new Exception("Invalid Withdraw Amount");
+    public void withdraw(Double amount) {
+        if (bank.getTime() - super.createdOn < minWithdrawalPeriod) {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                System.err.println("The account has not reached maturity of one year");
+            }
         }
+        super.withdraw(amount);
 
     }
 }

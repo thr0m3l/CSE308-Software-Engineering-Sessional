@@ -57,11 +57,11 @@ public class Bank {
 
         try {
             if (type.equals("Student")) {
-                accounts.put(name, new StudentAccount(name, amount));
-            } else if (type.equals("Fixed Deposit")) {
-                accounts.put(name, new FixedDepositAccount(name, amount));
+                accounts.put(name, new StudentAccount(this, name, amount));
+            } else if (type.equals("Fixed")) {
+                accounts.put(name, new FixedDepositAccount(this, name, amount));
             } else if (type.equals("Savings")) {
-                accounts.put(name, new SavingsAccount(name, amount));
+                accounts.put(name, new SavingsAccount(this, name, amount));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,6 +182,10 @@ public class Bank {
 
     public Double getInternalFund() {
         return internalFund;
+    }
+
+    public Integer getTime() {
+        return time;
     }
 
 }
