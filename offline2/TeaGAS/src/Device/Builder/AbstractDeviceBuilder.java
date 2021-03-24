@@ -1,14 +1,10 @@
 package Device.Builder;
 
-import Device.Enumerations.Connection;
-import Device.Exceptions.InvalidConnectionTypeException;
-import Device.Microcontroller;
+import Device.Microcontroller.Microcontroller;
 
 public interface AbstractDeviceBuilder {
 
     Microcontroller buildMicrocontroller();
-
-    void buildConnection() throws InvalidConnectionTypeException;
 
     void addDisplay();
 
@@ -16,6 +12,8 @@ public interface AbstractDeviceBuilder {
 
     void addController();
 
-    Microcontroller buildAll(Connection connection);
+    void addStorage();
+
+    Microcontroller buildAll();
 
 }

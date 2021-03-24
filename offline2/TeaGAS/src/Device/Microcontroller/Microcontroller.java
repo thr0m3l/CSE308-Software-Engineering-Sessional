@@ -1,4 +1,4 @@
-package Device;
+package Device.Microcontroller;
 
 import Device.Enumerations.*;
 import Device.Exceptions.InvalidConnectionTypeException;

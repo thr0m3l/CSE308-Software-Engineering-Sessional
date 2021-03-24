@@ -1,26 +1,19 @@
 package Device.Builder;
 
-import Device.Enumerations.Connection;
 import Device.Enumerations.Controller;
 import Device.Enumerations.Display;
 import Device.Enumerations.Identification;
-import Device.Exceptions.InvalidConnectionTypeException;
-import Device.Microcontroller;
-import Device.RaspberryPi;
+import Device.Enumerations.Storage;
+import Device.Microcontroller.Microcontroller;
+import Device.Microcontroller.RaspberryPi;
 
 public class RaspberryPiBuilder implements AbstractDeviceBuilder{
 
     private Microcontroller microcontroller;
-    private Connection connection;
 
     @Override
     public Microcontroller buildMicrocontroller() {
         return new RaspberryPi();
-    }
-
-    @Override
-    public void buildConnection() throws InvalidConnectionTypeException {
-        this.microcontroller.setConnection(connection);
     }
 
     @Override
@@ -39,20 +32,19 @@ public class RaspberryPiBuilder implements AbstractDeviceBuilder{
     }
 
     @Override
-    public Microcontroller buildAll(Connection connection) {
+    public void addStorage() {
+        this.microcontroller.setStorage(Storage.Internal);
+    }
 
-        this.connection = connection;
+    @Override
+    public Microcontroller buildAll() {
 
         this.microcontroller = buildMicrocontroller();
-        try {
-            buildConnection();
-        } catch (Exception e){
-            System.err.println(e.getMessage());
-            return null;
-        }
+
         addDisplay();
         addController();
         addIdentification();
+        addStorage();
 
         System.out.println(microcontroller);
         return this.microcontroller;

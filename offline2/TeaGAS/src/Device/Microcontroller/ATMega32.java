@@ -1,4 +1,4 @@
-package Device;
+package Device.Microcontroller;
 
 import Device.Enumerations.*;
 import Device.Exceptions.InvalidConnectionTypeException;
@@ -6,10 +6,6 @@ import Device.Exceptions.InvalidConnectionTypeException;
 public class ATMega32 extends Microcontroller{
     public ATMega32() {
         super.setType("ATMega32");
-        super.setController(Controller.Buttons);
-        super.setDisplay(Display.LCD);
-        super.setStorage(Storage.SDCard);
-        super.setIdentification(Identification.RFID);
     }
 
     @Override
@@ -18,4 +14,5 @@ public class ATMega32 extends Microcontroller{
             super.setConnection(connection);
         } else throw new InvalidConnectionTypeException();
     }
+
 }
