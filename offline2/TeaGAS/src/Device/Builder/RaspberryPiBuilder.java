@@ -46,7 +46,6 @@ public class RaspberryPiBuilder implements AbstractDeviceBuilder{
         addIdentification();
         addStorage();
 
-        System.out.println(microcontroller);
         return this.microcontroller;
     }
 }

@@ -45,7 +45,6 @@ public class ATMega32Builder implements AbstractDeviceBuilder{
         addIdentification();
         addStorage();
 
-        System.out.println(microcontroller);
         return this.microcontroller;
 
 

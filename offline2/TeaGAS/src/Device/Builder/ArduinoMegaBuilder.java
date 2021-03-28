@@ -46,7 +46,6 @@ public class ArduinoMegaBuilder implements AbstractDeviceBuilder{
         addIdentification();
         addStorage();
 
-        System.out.println(microcontroller);
         return this.microcontroller;
     }
 }
