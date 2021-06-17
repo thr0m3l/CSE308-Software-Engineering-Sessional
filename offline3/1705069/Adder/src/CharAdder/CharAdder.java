@@ -1,7 +1,7 @@
 package CharAdder;
 
-import AdderAdaptor.CharToIntAdapter;
-import AdderAdaptor.AdderAdapter;
+import AdderAdapter.CharToIntAdapter;
+import AdderAdapter.AdderAdapter;
 
 public class CharAdder {
 
