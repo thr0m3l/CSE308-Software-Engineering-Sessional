@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class StockPlatform implements Observable{
     private HashMap<String, Stock> stocks = new HashMap<>();

@@ -24,34 +24,17 @@ public class Client implements Runnable{
     @Override
     public void run() {
         try {
-            socket = new Socket(hostname,PORT);
 
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-
-            inputStream = socket.getInputStream();
-            objectInputStream = new ObjectInputStream(inputStream);
-
-            this.user = new User();
-            this.user.setAdmin(isAdmin);
-            objectOutputStream.writeObject(user);
-            System.out.println("Observer object sent to server");
-
-            try {
-                Message allStocks = (Message) objectInputStream.readObject();
-                System.out.println(allStocks.getMessage());
-            } catch (ClassNotFoundException classNotFoundException){
-                classNotFoundException.printStackTrace();
-            }
+            initConnection();
+            sendObserver();
+            receiveAllStockInfo();
 
             while (socket.isConnected()){
                 Message msg = null;
                 try {
                     msg =  (Message) objectInputStream.readObject();
                     System.out.println(msg.getMessage());
-                } catch (EOFException e){
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (EOFException | ClassNotFoundException e){
                     e.printStackTrace();
                 }
             }
@@ -61,7 +44,40 @@ public class Client implements Runnable{
         }
     }
 
-    public void send (String msg){
+    private void receiveAllStockInfo(){
+        try {
+            Message allStocks = (Message) objectInputStream.readObject();
+            System.out.println(allStocks.getMessage());
+        } catch (ClassNotFoundException | IOException classNotFoundException){
+            classNotFoundException.printStackTrace();
+        }
+    }
+
+    private void sendObserver(){
+        this.user = new User();
+        this.user.setAdmin(isAdmin);
+        try {
+            objectOutputStream.writeObject(user);
+            System.out.println("Observer object sent to server");
+        } catch (IOException e) {
+            System.err.println("Error sending observer to server");
+        }
+
+    }
+
+    private void initConnection(){
+        try {
+            socket = new Socket(hostname,PORT);
+            outputStream = socket.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            inputStream = socket.getInputStream();
+            objectInputStream = new ObjectInputStream(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMsg(String msg){
         try {
             Message message = new Message();
             message.setMessage(msg);

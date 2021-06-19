@@ -81,27 +81,34 @@ class Handler implements Runnable{
         sendAllStockInfo();
 
         while (socket.isConnected()){
-            Message msg = receiveMsg();
-            String token[] = msg.getMessage().split(" ");
-
-            if (token[0].equalsIgnoreCase("S")){
-                stockPlatform.addObserver(token[1], this.user);
-            } else if (token[0].equalsIgnoreCase("U")){
-                stockPlatform.removeObserver(token[1],this.user);
-            } else if (token[0].equalsIgnoreCase("I") && this.user.isAdmin()){
-                stockPlatform.incPrice(token[1], Double.parseDouble(token[2]));
-            } else if (token[0].equalsIgnoreCase("D") && this.user.isAdmin()){
-                stockPlatform.decPrice(token[1], Double.parseDouble(token[2]));
-            } else if (token[0].equalsIgnoreCase("C") && this.user.isAdmin()){
-                stockPlatform.setQuantity(token[1], Integer.parseInt(token[2]));
-            }  else {
-                sendMessage("Invalid command");
-            }
-
+            handleCommand(receiveMsg());
         }
-
     }
-    public void getUser(){
+
+    private void handleCommand(Message msg){
+
+        if (msg == null) {
+            System.err.println("NULL Message");
+            sendMsg("NULL Message");
+        }
+        String token[] = msg.getMessage().split(" ");
+
+        if (token[0].equalsIgnoreCase("S")){
+            stockPlatform.addObserver(token[1], this.user);
+        } else if (token[0].equalsIgnoreCase("U")){
+            stockPlatform.removeObserver(token[1],this.user);
+        } else if (token[0].equalsIgnoreCase("I") && this.user.isAdmin()){
+            stockPlatform.incPrice(token[1], Double.parseDouble(token[2]));
+        } else if (token[0].equalsIgnoreCase("D") && this.user.isAdmin()){
+            stockPlatform.decPrice(token[1], Double.parseDouble(token[2]));
+        } else if (token[0].equalsIgnoreCase("C") && this.user.isAdmin()){
+            stockPlatform.setQuantity(token[1], Integer.parseInt(token[2]));
+        }  else {
+            sendMsg("Invalid command");
+        }
+    }
+
+    private void getUser(){
         try {
             User user = (User) objectInputStream.readObject();
             Server.addUser(user);
@@ -115,7 +122,7 @@ class Handler implements Runnable{
         }
     }
 
-    public void sendAllStockInfo(){
+    private void sendAllStockInfo(){
         try {
             Message allStocks  = new Message();
             for(Stock stock : stockPlatform.getStocks()){
@@ -128,7 +135,7 @@ class Handler implements Runnable{
         }
     }
 
-    public void initConnection(){
+    private void initConnection(){
         try {
             System.out.println("Attempting to connect to an user . . .");
             inputStream = socket.getInputStream();
@@ -142,7 +149,7 @@ class Handler implements Runnable{
 
     }
 
-    Message receiveMsg(){
+    private Message receiveMsg(){
         try {
             Message message = (Message) objectInputStream.readObject();
             return message;
@@ -154,7 +161,7 @@ class Handler implements Runnable{
         return new Message();
     }
 
-    void sendMessage(String msg){
+    private void sendMsg(String msg){
         Message message = new Message();
         message.setMessage(msg);
         try {

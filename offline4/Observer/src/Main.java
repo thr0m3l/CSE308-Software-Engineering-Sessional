@@ -1,7 +1,5 @@
 import Client.Client;
-import Client.Observer;
 import Client.User;
-import Server.StockPlatform;
 
 import java.util.Scanner;
 
@@ -26,7 +24,7 @@ public class Main {
 
 		while (true){
 			String msg = scanner.nextLine();
-			client.send(msg);
+			client.sendMsg(msg);
 			try{
 				Thread.sleep(100);
 			} catch (InterruptedException e){

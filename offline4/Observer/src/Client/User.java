@@ -18,10 +18,13 @@ public class User implements Observer, Serializable {
 
     @Override
     public void update(Stock stock) {
-//        System.out.println("Stock updated " + stock);
-        ObjectOutputStream outputStream  = Server.getStream(this);
+        sendMessage("Stock updated " + stock);
+    }
+
+    public void sendMessage(String msg){
         Message message = new Message();
-        message.setMessage("Stock updated " + stock);
+        message.setMessage(msg);
+        ObjectOutputStream outputStream  = Server.getStream(this);
         try {
             outputStream.writeObject(message);
         } catch (IOException e) {
