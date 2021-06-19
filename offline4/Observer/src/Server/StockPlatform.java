@@ -20,7 +20,7 @@ public class StockPlatform implements Observable{
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filename)))
         {
             String line = " ";
-            while(line != null){
+            while(true){
                 line = bufferedReader.readLine();
                 if (line == null) break;
                 String tokens[] = line.split(" ");
@@ -28,7 +28,7 @@ public class StockPlatform implements Observable{
                 stocks.put(tokens[0], stock);
                 observerList.put(stock, new ArrayList<Observer>());
             }
-            System.out.println("Server.Server.Stock data read from file");
+            System.out.println("Stock data read from file");
             System.out.println(stocks);
 
         } catch (FileNotFoundException fileNotFoundException){
@@ -61,8 +61,15 @@ public class StockPlatform implements Observable{
         return stocks.get(state);
     }
 
-    public void setPrice(String stockName, double price){
-        stocks.get(stockName).setPrice(price);
+    public void incPrice(String stockName, double price){
+        Stock stock = stocks.get(stockName);
+        stock.setPrice(stock.getPrice() + price);
+        notifyObserver(stockName);
+    }
+
+    public void decPrice(String stockName, double price){
+        Stock stock = stocks.get(stockName);
+        stock.setPrice(stock.getPrice() - price);
         notifyObserver(stockName);
     }
 

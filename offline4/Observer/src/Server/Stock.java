@@ -38,7 +38,7 @@ public class Stock {
 
     @Override
     public String toString() {
-        return "Server.Server.Stock{" +
+        return "Stock{" +
                 "price=" + price +
                 ", quantity=" + quantity +
                 ", name='" + name + '\'' +

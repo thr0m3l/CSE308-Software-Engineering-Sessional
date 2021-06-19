@@ -11,11 +11,18 @@ public class Main {
 	public static User user = null;
 
 	public static void main(String[] args) {
-		Client client = new Client("localhost",8818);
+		Scanner scanner = new Scanner(System.in);
+		boolean admin = false;
+		System.out.println("Access level? U/A");
+		String isAdmin = scanner.nextLine();
+		if (isAdmin.equalsIgnoreCase("A")){
+			admin = true;
+		}
+		Client client = new Client("localhost",8818, admin);
 		Thread t = new Thread(client);
 		t.start();
 
-		Scanner scanner = new Scanner(System.in);
+
 
 		while (true){
 			String msg = scanner.nextLine();

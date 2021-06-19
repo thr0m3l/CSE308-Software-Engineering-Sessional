@@ -13,11 +13,13 @@ public class Client implements Runnable{
     private ObjectOutputStream objectOutputStream;
     private String hostname;
     private int PORT;
-    private Observer user;
+    private User user;
+    private boolean isAdmin = false;
 
-    public Client(String hostname, int PORT) {
+    public Client(String hostname, int PORT, boolean isAdmin) {
         this.hostname = hostname;
         this.PORT = PORT;
+        this.isAdmin = isAdmin;
     }
     @Override
     public void run() {
@@ -31,6 +33,7 @@ public class Client implements Runnable{
             objectInputStream = new ObjectInputStream(inputStream);
 
             this.user = new User();
+            this.user.setAdmin(isAdmin);
             objectOutputStream.writeObject(user);
             System.out.println("Observer object sent to server");
 
@@ -42,10 +45,10 @@ public class Client implements Runnable{
             }
 
             while (socket.isConnected()){
-                String msg = null;
+                Message msg = null;
                 try {
-                    msg = (String) objectInputStream.readObject();
-                    System.out.println(msg);
+                    msg =  (Message) objectInputStream.readObject();
+                    System.out.println(msg.getMessage());
                 } catch (EOFException e){
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
