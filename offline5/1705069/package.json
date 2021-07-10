@@ -1,0 +1,15 @@
+{
+  "name": "1705069",
+  "version": "1.0.0",
+  "description": "Unit tests for sorting algorithm",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^27.0.6",
+    "multiset": "^1.1.0"
+  }
+}
